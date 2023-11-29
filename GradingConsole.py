@@ -1,12 +1,16 @@
 import tkinter as tk
+from tkinter import ttk, font
+
+
 
 class GradeCalculator(tk.Tk):
-
-    
 
 
     def __init__(self):
         super().__init__()
+        
+        
+        self.set_theme()
 
         self.title("Grade Calculator")
         self.total_pts_lost = 0
@@ -20,11 +24,11 @@ class GradeCalculator(tk.Tk):
         self.grade_listbox.grid(row=0, column=0, padx=10, pady=10)
 
         # Entry widget to input grades
-        self.grade_entry = tk.Entry(self, width=10)
+        self.grade_entry = ttk.Entry(self, width=10)
         self.grade_entry.grid(row=1, column=0, padx=10, pady=10)
 
         # Button to add grade
-        self.add_button = tk.Button(self, text="Add", command=self.add_grade)
+        self.add_button = ttk.Button(self, text="Add", command=self.add_grade)
         self.add_button.grid(row=2, column=0, padx=10, pady=10)
 
 
@@ -45,7 +49,7 @@ class GradeCalculator(tk.Tk):
         self.pts_possible_entry.config(fg='grey')  # Change text color to grey
 
         #cfont = tk.Font(size=12, weight="bold")
-        self.per_label = tk.Label(self, text="Score", font=("Arial", 14, "bold"))
+        self.per_label = ttk.Label(self, text="Score", font=("Arial", 14, "bold"))
         self.per_label.grid(row=2, column=1, padx=10, pady=10)
 
 
@@ -63,6 +67,8 @@ class GradeCalculator(tk.Tk):
         # Bind the ListBox so user can right-click to delete / clear
         self.grade_listbox.bind("<Button-3>", lambda event: self.on_listbox_right_click(event))
         self.grade_listbox.bind("<Button-1>", lambda event: self.destroy_menu())
+        
+        
 
 
     def destroy_menu(self):
@@ -91,12 +97,27 @@ class GradeCalculator(tk.Tk):
 
         self.destroy_menu()
 
-        self.context_menu = tk.Menu(self, tearoff=0)
+        self.context_menu = ttk.Menu(self, tearoff=0)
         self.context_menu.add_command(label="Delete", command=self.del_item)
         self.context_menu.add_command(label="Delete All", command=self.clear)
         self.context_menu.post(event.x_root, event.y_root)
 
         self.update_score()
+    
+    def set_theme(self):
+        #style = ttk.Style()
+        #print("themes: " + str(style.theme_names()))
+        
+        #self.tk.call("source", "winxpblue/winxpblue.tcl")
+        self.tk.call("source", "adapta/adapta.tcl")
+        #self.tk.call("set_theme", "dark")
+        ttk.Style().theme_use("adapta")
+        
+        #self.tk.call("set_theme", "dark")
+        #style.theme_use("clam")
+        #style.set_theme("clam")
+        #self.set_theme()
+        #self.set_theme(theme_name="arc")
 
 
     def del_item(self):
@@ -181,6 +202,7 @@ def blah(x):
 
         
 if __name__ == "__main__":
+    
     app = GradeCalculator()
     #app.bind_all("<Key>", blah)
     app.mainloop()
