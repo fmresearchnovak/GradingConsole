@@ -150,6 +150,9 @@ class GradeCalculator(tk.Tk):
 
 
     def update_score(self):
+        # Clear the entry for the next input
+        self.grade_entry.delete(0, tk.END)
+        
         try:
             pts_possible = float(self.pts_possible_entry.get())
         except:
@@ -166,8 +169,6 @@ class GradeCalculator(tk.Tk):
 
 
 
-        # Clear the entry for the next input
-        self.grade_entry.delete(0, tk.END)
 
     def add_grade(self):
         try:
