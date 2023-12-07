@@ -11,7 +11,6 @@ class GradeCalculator(tk.Tk):
         
         
         self.set_theme()
-
         self.title("Grade Calculator")
         self.total_pts_lost = 0
         self.context_menu = None
@@ -32,24 +31,24 @@ class GradeCalculator(tk.Tk):
         self.add_button.grid(row=2, column=0, padx=10, pady=10)
 
 
-        inner_frame = tk.Frame(self, bd=2, relief=tk.SOLID)
+        inner_frame = ttk.Frame(self, padding="10", relief=tk.SOLID)
         inner_frame.grid(row=0, column=1, padx=10, pady=10)
 
 
         # Label to display point totals
-        self.lost_label = tk.Label(inner_frame, text="Pts Lost: 0.0", fg="red")
+        self.lost_label = ttk.Label(inner_frame, text="Pts Lost: 0.0", style="Red.TLabel")
         self.lost_label.grid(row=0, column=0, padx=10)
-        self.earned_label = tk.Label(inner_frame, text="Pts Earned: 0.0", fg="green")
+        self.earned_label = ttk.Label(inner_frame, text="Pts Earned: 0.0", style="Green.TLabel")
         self.earned_label.grid(row=1, column=0, padx=10)
 
         # Entry widget to input total points possible
-        self.pts_possible_entry = tk.Entry(self, width=10)
+        self.pts_possible_entry = ttk.Entry(self, width=10, style="Grey.TEntry")
         self.pts_possible_entry.grid(row=1, column=1, padx=10, pady=10)
         self.pts_possible_entry.insert(0, "Pts Possible")
-        self.pts_possible_entry.config(fg='grey')  # Change text color to grey
+
 
         #cfont = tk.Font(size=12, weight="bold")
-        self.per_label = ttk.Label(self, text="Score", font=("Arial", 14, "bold"))
+        self.per_label = ttk.Label(self, text="Score", font=("Arial", 14, "bold"), anchor="center")
         self.per_label.grid(row=2, column=1, padx=10, pady=10)
 
 
@@ -97,7 +96,7 @@ class GradeCalculator(tk.Tk):
 
         self.destroy_menu()
 
-        self.context_menu = ttk.Menu(self, tearoff=0)
+        self.context_menu = tk.Menu(self, tearoff=0)
         self.context_menu.add_command(label="Delete", command=self.del_item)
         self.context_menu.add_command(label="Delete All", command=self.clear)
         self.context_menu.post(event.x_root, event.y_root)
@@ -108,11 +107,17 @@ class GradeCalculator(tk.Tk):
         #style = ttk.Style()
         #print("themes: " + str(style.theme_names()))
         
-        #self.tk.call("source", "winxpblue/winxpblue.tcl")
-        self.tk.call("source", "adapta/adapta.tcl")
+        self.tk.call("source", "winxpblue/winxpblue.tcl")
+        ttk.Style().theme_use("winxpblue")
+        #self.tk.call("source", "adapta/adapta.tcl")
+        #ttk.Style().theme_use("adapta")
         #self.tk.call("set_theme", "dark")
-        ttk.Style().theme_use("adapta")
-        
+
+        ttk.Style().configure("Red.TLabel", foreground="red")
+        ttk.Style().configure("Green.TLabel", foreground="green")
+        ttk.Style().configure("Black.TEntry", foreground="black")
+        ttk.Style().configure("Grey.TEntry", foreground="grey")
+
         #self.tk.call("set_theme", "dark")
         #style.theme_use("clam")
         #style.set_theme("clam")
@@ -138,13 +143,13 @@ class GradeCalculator(tk.Tk):
     def on_pts_possible_entry_click(self):
         if self.pts_possible_entry.get() == "Pts Possible":
             self.pts_possible_entry.delete(0, tk.END)
-            self.pts_possible_entry.config(fg='black')  # Change text color to black
+            self.pts_possible_entry.config(style="Black.TEntry")  # Change text color to black
 
 
     def on_pts_possible_entry_leave(self):
         if self.pts_possible_entry.get() == "":
-            self.pts_possible_entry.delete(0, "Pts Possible")
-            self.pts_possible_entry.config(fg='grey')  # Change text color to black
+            self.pts_possible_entry.insert(0, "Pts Possible")
+            self.pts_possible_entry.config(style="Grey.TEntry")  # Change text color to black
         else:
             self.update_score()
 
@@ -157,6 +162,8 @@ class GradeCalculator(tk.Tk):
             pts_possible = float(self.pts_possible_entry.get())
         except:
             print("Please input total points possible!")
+            self.earned_label.config(text="Pts Earned: 0.0")
+            self.per_label.config(text="Score")
             return
 
         etotal = pts_possible - self.total_pts_lost
@@ -164,7 +171,7 @@ class GradeCalculator(tk.Tk):
 
 
         percentage = (etotal/pts_possible) * 100
-        self.per_label.config(text="--Score--\n%.2f/%.2f = %.3f%%" % (etotal, pts_possible, percentage))
+        self.per_label.config(text="%.2f/%.2f = %.3f%%" % (etotal, pts_possible, percentage))
         #self.per_label.config(font=(self.per_label['font'].actual()['family'], self.per_label['font'].actual()['size'] + 2, "bold"))
 
 
