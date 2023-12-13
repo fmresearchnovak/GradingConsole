@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+
+
 import tkinter as tk
 from tkinter import ttk, font
 
@@ -17,7 +20,8 @@ class GradeCalculator(tk.Tk):
 
         # List to store entered grades
         self.grades = []
-
+        
+        
         # Listbox to display grades
         self.grade_listbox = tk.Listbox(self, width=10, height=10)
         self.grade_listbox.grid(row=0, column=0, padx=10, pady=10)
@@ -33,23 +37,28 @@ class GradeCalculator(tk.Tk):
 
         inner_frame = ttk.Frame(self, padding="10", relief=tk.SOLID)
         inner_frame.grid(row=0, column=1, padx=10, pady=10)
-
-
-        # Label to display point totals
-        self.lost_label = ttk.Label(inner_frame, text="Pts Lost: 0.0", style="Red.TLabel")
-        self.lost_label.grid(row=0, column=0, padx=10)
-        self.earned_label = ttk.Label(inner_frame, text="Pts Earned: 0.0", style="Green.TLabel")
-        self.earned_label.grid(row=1, column=0, padx=10)
+        
 
         # Entry widget to input total points possible
-        self.pts_possible_entry = ttk.Entry(self, width=10, style="Grey.TEntry")
-        self.pts_possible_entry.grid(row=1, column=1, padx=10, pady=10)
+        self.pts_possible_entry = ttk.Entry(inner_frame, width=10, style="Grey.TEntry")
+        self.pts_possible_entry.grid(row=0, column=0, padx=10, pady=10)
         self.pts_possible_entry.insert(0, "Pts Possible")
 
-
+        
+        # Label to display point totals
+        self.lost_label = ttk.Label(inner_frame, text="Pts Lost: 0.0", style="Red.TLabel")
+        self.lost_label.grid(row=1, column=0, padx=10)
+        self.earned_label = ttk.Label(inner_frame, text="Pts Earned: 0.0", style="Green.TLabel")
+        self.earned_label.grid(row=2, column=0, padx=10)
+        
+        
         #cfont = tk.Font(size=12, weight="bold")
-        self.per_label = ttk.Label(self, text="Score", font=("Arial", 14, "bold"), anchor="center")
-        self.per_label.grid(row=2, column=1, padx=10, pady=10)
+        self.per_label = ttk.Label(inner_frame, text="Score", font=("Arial", 14, "bold"), anchor="center")
+        self.per_label.grid(row=3, column=0, padx=10, pady=10)
+        
+        # Entry widget to do eval lines, this feature is a big security flaw!
+        self.eval_entry = ttk.Entry(self, width=15)
+        self.eval_entry.grid(row=2, column=1, padx=10, pady=10)
 
 
         # Bind the stuff for the pts_possible and it's "hint"
@@ -59,7 +68,7 @@ class GradeCalculator(tk.Tk):
 
 
         # Bind the Enter key to the Add Grade button
-        self.bind('<Return>', lambda event=None: self.add_grade())
+        self.bind('<Return>', self.enter_key_callback)
         self.bind('<KP_Enter>', lambda event=None: self.add_grade())
 
 
@@ -68,6 +77,10 @@ class GradeCalculator(tk.Tk):
         self.grade_listbox.bind("<Button-1>", lambda event: self.destroy_menu())
         
         
+        
+    def enter_key_callback(self, event):
+        self.add_grade()
+        self.python_bad_security_evaluation()
 
 
     def destroy_menu(self):
@@ -152,6 +165,20 @@ class GradeCalculator(tk.Tk):
             self.pts_possible_entry.config(style="Grey.TEntry")  # Change text color to black
         else:
             self.update_score()
+            
+            
+    def python_bad_security_evaluation(self):
+        try:
+            line = str(self.eval_entry.get())
+            result = eval(line)
+            result = str(result)
+            #print(type(result))
+            #print("result: ", result)
+            #self.eval_entry.config(text=str(result))
+            self.eval_entry.delete(0, tk.END) # delete current text
+            self.eval_entry.insert(0, str(result)) # insert result
+        except:
+            print("failed to eval: " + str(self.eval_entry.get()))
 
 
     def update_score(self):
@@ -171,9 +198,8 @@ class GradeCalculator(tk.Tk):
 
 
         percentage = (etotal/pts_possible) * 100
-        self.per_label.config(text="%.2f/%.2f = %.3f%%" % (etotal, pts_possible, percentage))
+        self.per_label.config(text="%.1f/%.1f = %.2f%%" % (etotal, pts_possible, percentage))
         #self.per_label.config(font=(self.per_label['font'].actual()['family'], self.per_label['font'].actual()['size'] + 2, "bold"))
-
 
 
 
