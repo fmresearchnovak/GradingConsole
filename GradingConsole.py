@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 
-
+import platform
 import tkinter as tk
 from tkinter import ttk, font
 
@@ -25,6 +25,11 @@ class GradeCalculator(tk.Tk):
         # Listbox to display grades
         self.grade_listbox = tk.Listbox(self, width=10, height=10)
         self.grade_listbox.grid(row=0, column=0, padx=10, pady=10)
+        #self.grade_listbox.pack(side="left")
+        sb = tk.Scrollbar(self, orient='vertical', command=self.grade_listbox.yview)
+        #sb.pack(side="right", fill="y")
+        #sb.grid(row=0, column=0, sticky=tk.NS)
+        self.grade_listbox.config(yscrollcommand = sb.set)
 
         # Entry widget to input grades
         self.grade_entry = ttk.Entry(self, width=10)
@@ -73,7 +78,12 @@ class GradeCalculator(tk.Tk):
 
 
         # Bind the ListBox so user can right-click to delete / clear
-        self.grade_listbox.bind("<Button-3>", lambda event: self.on_listbox_right_click(event))
+        if (platform.system() == "Linux"):
+            right_click_button = "<Button-3>"
+        if (platform.system() == "Darwin"):
+            right_click_button = "<Button-2>"
+            
+        self.grade_listbox.bind(right_click_button, lambda event: self.on_listbox_right_click(event))
         self.grade_listbox.bind("<Button-1>", lambda event: self.destroy_menu())
         
         
