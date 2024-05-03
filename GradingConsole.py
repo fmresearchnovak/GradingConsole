@@ -17,6 +17,7 @@ class GradeCalculator(tk.Tk):
         self.title("Grade Calculator")
         self.total_pts_lost = 0
         self.context_menu = None
+        self.iconphoto(False, tk.PhotoImage(file="gc_icon.png"))
 
         # List to store entered grades
         self.grades = []
