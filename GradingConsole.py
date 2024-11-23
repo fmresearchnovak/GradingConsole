@@ -1,4 +1,4 @@
-#!/usr/bin/python3
+#!/usr/bin/env python3
 
 import platform
 import tkinter as tk
@@ -35,6 +35,7 @@ class GradeCalculator(tk.Tk):
         # Entry widget to input grades
         self.grade_entry = ttk.Entry(self, width=10)
         self.grade_entry.grid(row=1, column=0, padx=10, pady=10)
+        self.grade_entry.insert(0, "Pts. Lost")
 
         # Button to add grade
         self.add_button = ttk.Button(self, text="Add", command=self.add_grade)
@@ -65,6 +66,7 @@ class GradeCalculator(tk.Tk):
         # Entry widget to do eval lines, this feature is a big security flaw!
         self.eval_entry = ttk.Entry(self, width=15)
         self.eval_entry.grid(row=2, column=1, padx=10, pady=10)
+        self.eval_entry.insert(0, "Enter Equation and Press Enter!")
 
 
         # Bind the stuff for the pts_possible and it's "hint"
