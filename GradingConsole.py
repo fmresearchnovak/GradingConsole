@@ -15,7 +15,6 @@ class GradeCalculator(tk.Tk):
         
         self.set_theme()
         self.title("Grade Calculator")
-        self.total_pts_lost = 0
         self.context_menu = None
         self.iconphoto(False, tk.PhotoImage(file="gc_icon.png"))
 
@@ -112,12 +111,12 @@ class GradeCalculator(tk.Tk):
             item = self.grade_listbox.get(item_index)
             self.grade_listbox.selection_set(item_index)
             self.grade_listbox.activate(item_index)
-            print(f"Right-clicked on item: {item}")
+            #print(f"Right-clicked on item: {item}")
 
-        else:
+        #else:
             # This never gets called!
             # Right-click on the Listbox itself
-            print("Right-clicked on Listbox")
+            #print("Right-clicked on Listbox")
 
 
         self.destroy_menu()
@@ -206,7 +205,7 @@ class GradeCalculator(tk.Tk):
             self.per_label.config(text="Score")
             return
 
-        etotal = pts_possible - self.total_pts_lost
+        etotal = pts_possible - sum(self.grades)
         self.earned_label.config(text=f"Pts Earned: {etotal:.2f}")
 
 
@@ -235,8 +234,8 @@ class GradeCalculator(tk.Tk):
             self.grade_listbox.insert(tk.END, g)
 
         # Update the lost label
-        self.total_pts_lost = sum(self.grades)
-        self.lost_label.config(text=f"Pts Lost: {self.total_pts_lost:.2f}")
+        pts_lost = sum(self.grades)
+        self.lost_label.config(text=f"Pts Lost: {pts_lost:.2f}")
 
         self.update_score()
 
