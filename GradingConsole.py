@@ -129,11 +129,12 @@ class GradeCalculator(tk.Tk):
         self.update_score()
     
     def set_theme(self):
-        #style = ttk.Style()
-        #print("themes: " + str(style.theme_names()))
+        style = ttk.Style()
+        print("themes: " + str(style.theme_names()))
         
-        self.tk.call("source", "winxpblue/winxpblue.tcl")
-        ttk.Style().theme_use("winxpblue")
+        style.theme_use("aqua")
+        #self.tk.call("source", "winxpblue/winxpblue.tcl")
+        #ttk.Style().theme_use("winxpblue")
         #self.tk.call("source", "adapta/adapta.tcl")
         #ttk.Style().theme_use("adapta")
         #self.tk.call("set_theme", "dark")
