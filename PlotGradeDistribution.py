@@ -1,3 +1,6 @@
+import subprocess
+import sys
+
 import matplotlib.pyplot as plt
 
 
@@ -26,11 +29,47 @@ def calculate_stats(numbers):
 
     return min_val, mean_val, median_val, max_val
     
+
+def get_clipboard_contents():
+    # Detect the operating system
+    if sys.platform == "darwin":  # macOS
+        command = ["pbpaste"]
+    elif sys.platform.startswith("linux"):  # Linux
+        # We try xclip first as it's the standard for GNOME/KDE/XFCE
+        command = ["xclip", "-selection", "clipboard", "-o"]
+    else:
+        print(f"Unsupported OS: {sys.platform}")
+        return None
+
+    try:
+        # Run the command and capture output
+        result = subprocess.run(command, capture_output=True, text=True, check=True)
+        return result.stdout
+
+    except FileNotFoundError:
+        print(f"Error: Clipboard utility (pbpaste/xclip) not found.")
+        return None
+
+    except subprocess.CalledProcessError:
+        print("Called Process Error.")
+        return None
     
 def main():
-    
-    data = [26, 37, 42, 45, 34, 44, 40, 35.5, 42, 46.5, 37, 42, 32, 44, 32, 31]
-    data = [int((x / 53.0) * 100) for x in data] # turn into percentages
+
+    data = get_clipboard_contents()
+    if not data:
+        print("Could not read clipboard data.")
+        data = [26, 37, 42, 45, 34, 44, 40, 35.5, 42, 46.5, 37, 42, 32, 44, 32, 31]
+        data = [int((x / 53.0) * 100) for x in data] # turn into percentages
+    else:
+        try:
+            data = [float(x) for x in data.splitlines()]
+        except ValueError:
+            print("Failed to parse clipboard data.")
+            print(data)
+            exit(1)
+
+    print("plotting data: " + str(data))
 
     min_val, mean_val, median_val, max_val = calculate_stats(data)
 

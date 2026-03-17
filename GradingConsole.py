@@ -80,12 +80,13 @@ class GradeCalculator(tk.Tk):
 
 
         # Bind the ListBox so user can right-click to delete / clear
-        if (platform.system() == "Linux"):
-            right_click_button = "<Button-3>"
-        if (platform.system() == "Darwin"):
-            right_click_button = "<Button-2>"
-            
-        self.grade_listbox.bind(right_click_button, lambda event: self.on_listbox_right_click(event))
+        #if (platform.system() == "Linux"):
+        #    right_click_button = "<Button-3>"
+        #if (platform.system() == "Darwin"):
+        #    right_click_button = "<Button-2>"     
+        #self.grade_listbox.bind(right_click_button, lambda event: self.on_listbox_right_click(event))
+
+        self.grade_listbox.bind("<Button-3>", lambda event: self.on_listbox_right_click(event))
         self.grade_listbox.bind("<Button-1>", lambda event: self.destroy_menu())
         
         
